@@ -1,6 +1,8 @@
 from scripts.state import State
 import pygame
 
+# 48, 66
+
 class Game(State):
     def __init__(self, game):
         super().__init__(game)
@@ -16,6 +18,8 @@ class Game(State):
         # self.circle_width = 75
 
     def update(self):
+        self.game.assets['ramiel_idle'].update()
+
         mpos = pygame.mouse.get_pos()
         mpos = (mpos[0] / 2, mpos[1] / 2)
         if self.game.interaction_options['left click']: # left click is true
@@ -37,6 +41,7 @@ class Game(State):
         surf.blit(self.game.assets['tamagachi'][0], (0,0))
         #pygame.draw.circle(surf, ('blue'), (104, 109), self.circle_radius, self.circle_width)
         surf.blit(self.game.assets['tamagachi'][1], (0,0))
+        surf.blit(self.game.assets['ramiel_idle'].img(), (48, 61))
         surf.blit(self.game.assets['play_buttons'][self.play_button_state], (0,0))
         surf.blit(self.game.assets['eat_buttons'][self.eat_button_state], (0,0))
         surf.blit(self.game.assets['sleep_buttons'][self.sleep_button_state], (0,0))

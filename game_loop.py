@@ -23,6 +23,7 @@ class GameLoop:
             'eat_buttons': load_images('eat_button', None),
             'play_buttons': load_images('play_button', None),
             'sleep_buttons': load_images('sleep_button', None),
+            'ramiel_idle': Animation(load_images('ramiel/idle', None), 10)
         }
 
         self.load_state()
