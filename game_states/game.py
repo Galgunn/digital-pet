@@ -1,7 +1,8 @@
 from scripts.state import State
 import pygame
 
-# 48, 66
+SCREEN_COOR = (48, 66)
+CIRCLE_COLOR = (203, 219, 252)
 
 class Game(State):
     def __init__(self, game):
@@ -37,15 +38,16 @@ class Game(State):
             self.start = True
         
         if self.start:
-            for x in range(74):
+            if self.circle_width != 5:
                 self.circle_width -=1
-            self.game.assets['ramiel_idle'].update()
+            else:
+                self.game.assets['ramiel_idle'].update()
 
     def render(self, surf):
         surf.fill((200, 30, 50))
         surf.blit(self.game.assets['tamagachi'][1], (0,0))
-        surf.blit(self.game.assets['ramiel_idle'].img(), (48, 61))
-        pygame.draw.circle(surf, ('blue'), (104, 109), 75, self.circle_width)
+        surf.blit(self.game.assets['ramiel_idle'].img(), (48, 65))
+        pygame.draw.circle(surf, CIRCLE_COLOR, (104, 109), 75, self.circle_width)
         surf.blit(self.game.assets['tamagachi'][0], (0,0))
         surf.blit(self.game.assets['play_buttons'][self.play_button_state], (0,0))
         surf.blit(self.game.assets['eat_buttons'][self.eat_button_state], (0,0))
