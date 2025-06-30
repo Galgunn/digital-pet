@@ -19,12 +19,17 @@ class Game(State):
 
         self.circle_width = 75
 
+        self.ramiel_actions = ['ramiel_idle', 'ramiel_nod']
+        self.current_ramiel_action = 0
+
     def update(self):
         mpos = pygame.mouse.get_pos()
         mpos = (mpos[0] / 2, mpos[1] / 2)
         if self.game.interaction_options['left click']: # left click is true
             if self.play_button_rect.collidepoint(mpos):
                 self.play_button_state = 1
+                if self.start:
+                    self.current_ramiel_action = 1
             if self.eat_button_rect.collidepoint(mpos):
                 self.eat_button_state = 1
             if self.sleep_button_rect.collidepoint(mpos):
@@ -40,13 +45,12 @@ class Game(State):
         if self.start:
             if self.circle_width != 5:
                 self.circle_width -=1
-            else:
-                self.game.assets['ramiel_idle'].update()
+            self.game.assets[self.ramiel_actions[0]].update()
 
     def render(self, surf):
         surf.fill((200, 30, 50))
         surf.blit(self.game.assets['tamagachi'][1], (0,0))
-        surf.blit(self.game.assets['ramiel_idle'].img(), (48, 65))
+        surf.blit(self.game.assets[self.ramiel_actions[0]].img(), (48, 65))
         pygame.draw.circle(surf, CIRCLE_COLOR, (104, 109), 75, self.circle_width)
         surf.blit(self.game.assets['tamagachi'][0], (0,0))
         surf.blit(self.game.assets['play_buttons'][self.play_button_state], (0,0))

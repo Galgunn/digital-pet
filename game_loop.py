@@ -23,7 +23,8 @@ class GameLoop:
             'eat_buttons': load_images('eat_button', None),
             'play_buttons': load_images('play_button', None),
             'sleep_buttons': load_images('sleep_button', None),
-            'ramiel_idle': Animation(load_images('ramiel/idle', None), 10)
+            'ramiel_idle': Animation(load_images('ramiel/idle', None), 10),
+            'ramiel_nod': Animation(load_images('ramiel/nod', None), 10, False)
         }
 
         self.load_state()
