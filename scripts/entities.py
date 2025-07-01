@@ -17,10 +17,10 @@ class Entity:
     def set_action(self, action):
         if self.action != action:
             self.action = action
-            self.animation = self.game.assets[self.type + '/' + self.action].copy()
+            self.animation = self.game.assets[self.e_type + '/' + self.action].copy()
 
     def update(self, button_pressed=(0, 0, 0)):
-        self.button_pressed = button_pressed
+        button_action = button_pressed
         self.animation.update()
 
     def render(self, surf):
@@ -31,7 +31,9 @@ class Ramiel(Entity):
         super().__init__(game, 'ramiel', pos, size)
 
     def update(self, button_pressed=(0,0,0)):
-        return super().update(button_pressed=button_pressed)
+        super().update(button_pressed=button_pressed)
     
+        if button_pressed[0]:
+            self.set_action('nod')
 
         
