@@ -23,8 +23,8 @@ class GameLoop:
             'eat_buttons': load_images('eat_button', None),
             'play_buttons': load_images('play_button', None),
             'sleep_buttons': load_images('sleep_button', None),
-            'ramiel_idle': Animation(load_images('ramiel/idle', None), 10),
-            'ramiel_nod': Animation(load_images('ramiel/nod', None), 10, False)
+            'ramiel/idle': Animation(load_images('ramiel/idle', None), 10),
+            'ramiel/nod': Animation(load_images('ramiel/nod', None), 6, False)
         }
 
         self.load_state()
@@ -64,8 +64,8 @@ class GameLoop:
         self.state_stack.append(self.game_state)
 
     def reset_keys(self):
-        for option in self.menu_options:
-            self.menu_options[option] = False
+        for option in self.interaction_options:
+            self.interaction_options[option] = False
 
 if __name__ == '__main__':
     GameLoop().run()
