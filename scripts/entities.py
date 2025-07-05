@@ -40,3 +40,9 @@ class Ramiel(Entity):
         elif start:
             self.set_action('idle')
             self.starting_animation = True
+
+        # if start:
+        #     if button_pressed[0]:
+        #         self.set_action('nod')
+        #     if self.animation.done:
+        #         self.set_action('idle')

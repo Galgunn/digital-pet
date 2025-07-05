@@ -1,5 +1,6 @@
 from scripts.state import State
 from scripts.entities import Ramiel
+from game_states.dialog_box import DialogBox
 import pygame
 
 SCREEN_COOR = (48, 66)
@@ -8,7 +9,6 @@ CIRCLE_COLOR = (203, 219, 252)
 class Game(State):
     def __init__(self, game):
         super().__init__(game)
-        self.game = game
         self.button_states = [0, 0, 0]
 
         self.play_button_rect = pygame.Rect(54, 174, 26, 28)
@@ -22,25 +22,31 @@ class Game(State):
         self.ramiel = Ramiel(self.game, (48, 65))
 
     def update(self):
-        if self.start:
-            if self.circle_width != 5:
-                self.circle_width -=1
-            self.ramiel.update(self.start, (self.button_states[0], self.button_states[1], self.button_states[2]))
+        self.button_states[0] = 0
+        self.button_states[1] = 0
+        self.button_states[2] = 0
 
         mpos = pygame.mouse.get_pos()
         mpos = (mpos[0] / 2, mpos[1] / 2)
-        if self.game.interaction_options['left click']: # left click is true
+
+        if self.game.interaction_options['left click']['just pressed']:
+            self.start = True
+            
+        if self.game.interaction_options['left click']['held']: # left click is true
             if self.play_button_rect.collidepoint(mpos):
                 self.button_states[0] = 1
             if self.eat_button_rect.collidepoint(mpos):
                 self.button_states[1] = 1
             if self.sleep_button_rect.collidepoint(mpos):
                 self.button_states[2] = 1
-            self.start = True
-        if not self.game.interaction_options['left click']: # left click is false
-            self.button_states[0] = 0
-            self.button_states[1] = 0
-            self.button_states[2] = 0
+
+
+        if self.start:
+            if self.circle_width != 5:
+                self.circle_width -=1
+            self.ramiel.update(self.start, (self.button_states[0], self.button_states[1], self.button_states[2]))
+
+        self.game.reset_keys()
 
     def render(self, surf):
         surf.fill((200, 30, 50))

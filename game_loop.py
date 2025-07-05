@@ -14,8 +14,7 @@ class GameLoop:
         self.state_stack = []
 
         self.interaction_options = {
-            'left click': False,
-            'spacebar': False
+            'left click': {'held': False, 'just pressed': False}
         }
 
         self.assets = {
@@ -31,27 +30,29 @@ class GameLoop:
 
     def run(self):
         while self.running:
+
+            self.interaction_options['left click']['just pressed'] = False
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.interaction_options['spacebar'] = True
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_SPACE:
-                        self.interaction_options['spacebar'] = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        self.interaction_options['left click'] = True
+                        if not self.interaction_options['left click']['held']:
+                            self.interaction_options['left click']['just pressed'] = True
+                        self.interaction_options['left click']['held'] = True
+                        # print(self.interaction_options['left click'])
                 if event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:
-                        self.interaction_options['left click'] = False
+                        self.interaction_options['left click']['held'] = False
+                        # print(self.interaction_options['left click'])
             self.update()
             self.render()
 
     def update(self):
         self.state_stack[-1].update()
+        # print(self.state_stack[-1].name)
 
     def render(self):
         self.state_stack[-1].render(self.display)
@@ -64,8 +65,8 @@ class GameLoop:
         self.state_stack.append(self.game_state)
 
     def reset_keys(self):
-        for option in self.interaction_options:
-            self.interaction_options[option] = False
+        self.interaction_options['left click']['held'] = False
+        self.interaction_options['left click']['just pressed'] = False
 
 if __name__ == '__main__':
     GameLoop().run()
