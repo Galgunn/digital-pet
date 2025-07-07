@@ -27,22 +27,16 @@ class Entity:
 class Ramiel(Entity):
     def __init__(self, game, pos):
         super().__init__(game, 'ramiel', pos)
-        self.starting_animation = False
+        self.starting_animation_done = False
 
-    def update(self, start: bool, button_pressed=(0, 0, 0)):
+    def update(self, button_pressed=(0, 0, 0)):
         super().update()
     
-        if self.starting_animation:
+        if self.starting_animation_done:
             if button_pressed[0]:
                 self.set_action('nod')
             if self.animation.done:
                 self.set_action('idle')
-        elif start:
+        else:
             self.set_action('idle')
-            self.starting_animation = True
-
-        # if start:
-        #     if button_pressed[0]:
-        #         self.set_action('nod')
-        #     if self.animation.done:
-        #         self.set_action('idle')
+            self.starting_animation_done = True

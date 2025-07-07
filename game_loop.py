@@ -14,7 +14,7 @@ class GameLoop:
         self.state_stack = []
 
         self.interaction_options = {
-            'left click': {'held': False, 'just pressed': False}
+            'left click': {'held': False, 'just pressed': False, 'previous press': False}
         }
 
         self.assets = {
@@ -42,18 +42,15 @@ class GameLoop:
                         if not self.interaction_options['left click']['held']:
                             self.interaction_options['left click']['just pressed'] = True
                         self.interaction_options['left click']['held'] = True
-                        # print(self.interaction_options['left click'])
                 if event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:
                         self.interaction_options['left click']['held'] = False
-                        # print(self.interaction_options['left click'])
             self.update()
             self.render()
 
     def update(self):
         self.state_stack[-1].update()
-        # print(self.state_stack[-1].name)
-
+        
     def render(self):
         self.state_stack[-1].render(self.display)
         self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))

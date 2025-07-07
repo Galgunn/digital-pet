@@ -10,6 +10,7 @@ class Game(State):
     def __init__(self, game):
         super().__init__(game)
         self.button_states = [0, 0, 0]
+        self.button_just_pressed = [False, False, False]
 
         self.play_button_rect = pygame.Rect(54, 174, 26, 28)
         self.eat_button_rect = pygame.Rect(91, 186, 26, 28)
@@ -22,16 +23,18 @@ class Game(State):
         self.ramiel = Ramiel(self.game, (48, 65))
 
     def update(self):
-        self.button_states[0] = 0
-        self.button_states[1] = 0
-        self.button_states[2] = 0
-
+        for x in range(3):
+            self.button_states[x] = 0
+            self.button_just_pressed[x] = False
+        
         mpos = pygame.mouse.get_pos()
         mpos = (mpos[0] / 2, mpos[1] / 2)
 
         if self.game.interaction_options['left click']['just pressed']:
             self.start = True
-            
+            if self.play_button_rect.collidepoint(mpos):
+                self.button_just_pressed[0] = True
+
         if self.game.interaction_options['left click']['held']: # left click is true
             if self.play_button_rect.collidepoint(mpos):
                 self.button_states[0] = 1
@@ -40,13 +43,10 @@ class Game(State):
             if self.sleep_button_rect.collidepoint(mpos):
                 self.button_states[2] = 1
 
-
         if self.start:
             if self.circle_width != 5:
                 self.circle_width -=1
-            self.ramiel.update(self.start, (self.button_states[0], self.button_states[1], self.button_states[2]))
-
-        self.game.reset_keys()
+            self.ramiel.update(self.button_just_pressed)
 
     def render(self, surf):
         surf.fill((200, 30, 50))
