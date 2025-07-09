@@ -1,5 +1,6 @@
 from scripts.state import State
 from scripts.entities import Ramiel
+from scripts.ui_interactables import ActionButton
 from game_states.dialog_box import DialogBox
 import pygame
 
@@ -21,6 +22,7 @@ class Game(State):
         self.circle_width = 75
 
         self.ramiel = Ramiel(self.game, (48, 65))
+        self.play_button = ActionButton(self, 'play', (54, 174), (26, 28))
 
     def update(self):
         for x in range(3):
@@ -34,6 +36,9 @@ class Game(State):
             self.start = True
             if self.play_button_rect.collidepoint(mpos):
                 self.button_just_pressed[0] = True
+        # if self.ramiel.animation_done():
+        #     print('done')
+                    # DialogBox(self.game).enter_state()
 
         if self.game.interaction_options['left click']['held']: # left click is true
             if self.play_button_rect.collidepoint(mpos):

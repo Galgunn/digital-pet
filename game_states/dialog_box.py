@@ -22,10 +22,10 @@ class DialogBox(State):
         elif self.counter >= self.speed * len(self.line):
             self.done = True
 
-        if self.game.interaction_options['left click'] and not self.done: # Display current message instantly
+        if self.game.interaction_options['left click']['just pressed'] and not self.done: # Display current message instantly
             pass
             # self.counter = self.speed * len(self.line)
-        elif self.game.interaction_options['left click'] and self.done and self.current_line < len(self.lines) - 1: # Proceed to next line
+        elif self.game.interaction_options['left click']['just pressed'] and self.done and self.current_line < len(self.lines) - 1: # Proceed to next line
             self.current_line += 1
             self.done = False
             self.line = self.lines[self.current_line]
