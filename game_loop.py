@@ -19,9 +19,9 @@ class GameLoop:
 
         self.assets = {
             'tamagachi': load_images('tamagachi', None),
-            'eat_buttons': load_images('eat_button', None),
-            'play_buttons': load_images('play_button', None),
-            'sleep_buttons': load_images('sleep_button', None),
+            'eat/button': load_images('eat_button', None),
+            'play/button': load_images('play_button', None),
+            'sleep/button': load_images('sleep_button', None),
             'ramiel/idle': Animation(load_images('ramiel/idle', None), 10),
             'ramiel/nod': Animation(load_images('ramiel/nod', None), 6, False)
         }
