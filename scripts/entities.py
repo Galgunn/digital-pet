@@ -43,4 +43,4 @@ class Ramiel(Entity):
             self.starting_animation_done = True
 
     def animation_done(self):
-        current_animation_done = True
+        return True
