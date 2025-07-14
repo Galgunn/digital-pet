@@ -1,6 +1,6 @@
 import pygame, sys
 from scripts.utils import *
-from game_states.game import Game
+from game_states.tamagotchi import Game
 
 pygame.init()
 
@@ -14,44 +14,43 @@ class GameLoop:
         self.state_stack = []
 
         self.interaction_options = {
-            'left click': False,
-            'spacebar': False
+            'left click': {'held': False, 'just pressed': False, 'previous press': False}
         }
 
         self.assets = {
             'tamagachi': load_images('tamagachi', None),
-            'eat_buttons': load_images('eat_button', None),
-            'play_buttons': load_images('play_button', None),
-            'sleep_buttons': load_images('sleep_button', None),
-            'ramiel_idle': Animation(load_images('ramiel/idle', None), 10)
+            'eat/button': load_images('eat_button', None),
+            'play/button': load_images('play_button', None),
+            'sleep/button': load_images('sleep_button', None),
+            'ramiel/idle': Animation(load_images('ramiel/idle', None), 10),
+            'ramiel/nod': Animation(load_images('ramiel/nod', None), 6, False)
         }
 
         self.load_state()
 
     def run(self):
         while self.running:
+
+            self.interaction_options['left click']['just pressed'] = False
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.interaction_options['spacebar'] = True
-                if event.type == pygame.KEYUP:
-                    if event.key == pygame.K_SPACE:
-                        self.interaction_options['spacebar'] = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        self.interaction_options['left click'] = True
+                        if not self.interaction_options['left click']['held']:
+                            self.interaction_options['left click']['just pressed'] = True
+                        self.interaction_options['left click']['held'] = True
                 if event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:
-                        self.interaction_options['left click'] = False
+                        self.interaction_options['left click']['held'] = False
             self.update()
             self.render()
 
     def update(self):
         self.state_stack[-1].update()
-
+        
     def render(self):
         self.state_stack[-1].render(self.display)
         self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0, 0))
@@ -63,8 +62,8 @@ class GameLoop:
         self.state_stack.append(self.game_state)
 
     def reset_keys(self):
-        for option in self.menu_options:
-            self.menu_options[option] = False
+        self.interaction_options['left click']['held'] = False
+        self.interaction_options['left click']['just pressed'] = False
 
 if __name__ == '__main__':
     GameLoop().run()
