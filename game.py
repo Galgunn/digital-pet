@@ -1,6 +1,6 @@
 import pygame, sys
 from scripts.utils import *
-from game_states.game import Game
+from game_states.tamagotchi import Game
 
 pygame.init()
 
