@@ -8,9 +8,6 @@ clock = pygame.time.Clock()
 messages = ['This is a message, no?', 
            'Another message is cool, no??',
            '^_^',
-           'Yo final challange',
-           'Let yo bih go through yo phone',
-           'Aw hell Nah yo ass tweaking \njigsaw',
            'This is how a long message will be displayed here, IDK it might go on forever...']
 
 """ This is the setup of the scrolling text"""
