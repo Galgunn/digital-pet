@@ -18,7 +18,7 @@ class Game(State):
         self.play_button = ActionButton(self.game, 'play', (54, 174), (26, 28))
         self.eat_button = ActionButton(self.game, 'eat', (91, 186), (26, 28))
         self.sleep_button = ActionButton(self.game, 'sleep', (128, 174), (26, 28))
-        self.dialogue = DialogBox(self.game)
+        self.dialogue_state = DialogBox(self.game)
 
     def update(self):
         mpos = pygame.mouse.get_pos()
@@ -33,7 +33,6 @@ class Game(State):
         for x in range(len(button_states)):
             if button_states[x] == True:
                 self.start = True
-                # self.dialogue.enter_state()
 
         if self.start:
             if self.circle_width != 5:
@@ -42,7 +41,7 @@ class Game(State):
             self.ramiel.update(button_states)
 
             if self.ramiel.animation_done:
-                self.dialogue.enter_state()
+                self.dialogue_state.enter_state()
 
 
     def render(self, surf):

@@ -21,8 +21,10 @@ class DialogueSystem:
         elif self.counter >= self.speed * len(self.line):
             self.line_done = True
 
+        # Display line instantly
         if self.game.interaction_options['left click']['just pressed'] and not self.line_done: # Display current message instantly
             self.counter = self.speed * len(self.line)
+        # Proceed to the next line
         elif self.game.interaction_options['left click']['just pressed'] and self.line_done and self.current_line < len(self.dialogue_lines) - 1: # Proceed to next line
             self.current_line += 1
             self.line_done = False
@@ -41,4 +43,5 @@ class DialogueSystem:
         self.line_done = False
         self.current_line = 0
         self.line = self.dialogue_lines[self.current_line]
-        self.dialogue_complete = False
+        self.dialogue_complete = False        
+        self.snip = self.font.render('', True, (255, 255, 255))
