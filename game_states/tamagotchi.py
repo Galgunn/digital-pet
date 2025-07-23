@@ -43,6 +43,8 @@ class Game(State):
             if self.ramiel.animation_done:
                 self.dialogue_state.enter_state()
 
+    def update_animation(self):
+        self.ramiel.update()
 
     def render(self, surf):
         surf.fill((200, 30, 50))

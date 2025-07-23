@@ -20,7 +20,6 @@ class DialogueSystem:
             self.counter += 1
         elif self.counter >= self.speed * len(self.line):
             self.line_done = True
-
         # Display line instantly
         if self.game.interaction_options['left click']['just pressed'] and not self.line_done: # Display current message instantly
             self.counter = self.speed * len(self.line)
