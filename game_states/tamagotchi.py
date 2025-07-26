@@ -10,7 +10,6 @@ CIRCLE_COLOR = (203, 219, 252)
 class Game(State):
     def __init__(self, game):
         super().__init__(game)
-        self.button_just_pressed = [False, False, False]
         self.start = False
         self.circle_width = 75
 
@@ -40,8 +39,9 @@ class Game(State):
             self.ramiel.update(button_states)
 
             if self.ramiel.animation_done:
-                dialogue_state = DialogBox(self.game, 'press', 'play_button.json')
-                dialogue_state.enter_state()
+                if button_states[0]:
+                    dialogue_state = DialogBox(self.game, 'press', 'play_button.json')
+                    dialogue_state.enter_state()
 
     def update_animation(self):
         self.ramiel.update()
