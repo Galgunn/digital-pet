@@ -18,7 +18,6 @@ class Game(State):
         self.play_button = ActionButton(self.game, 'play', (54, 174), (26, 28))
         self.eat_button = ActionButton(self.game, 'eat', (91, 186), (26, 28))
         self.sleep_button = ActionButton(self.game, 'sleep', (128, 174), (26, 28))
-        self.dialogue_state = DialogBox(self.game)
 
     def update(self):
         mpos = pygame.mouse.get_pos()
@@ -41,7 +40,8 @@ class Game(State):
             self.ramiel.update(button_states)
 
             if self.ramiel.animation_done:
-                self.dialogue_state.enter_state()
+                dialogue_state = DialogBox(self.game, 'press', 'play_button.json')
+                dialogue_state.enter_state()
 
     def update_animation(self):
         self.ramiel.update()
