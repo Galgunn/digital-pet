@@ -1,8 +1,12 @@
 {
-    "press":[
-        "Testing, you just pressed the play button",
-        "You pressed it so now read",
-        "Keep reading",
-        "Alright you're  a !@%&^!!!"
+    "play_1":[
+        "Test 1"
+    ],
+    "play_2":[
+        "Test 2",
+        "How are you?"
+    ],
+    "play_3":[
+        "Yeah this the last line"
     ]
 }

@@ -32,7 +32,7 @@ class DialogueSystem:
         elif self.current_line == len(self.dialogue_lines) - 1 and self.line_done:
             self.dialogue_complete = True
 
-        self.snip = self.font.render(self.line[0:self.counter//self.speed], True, 'white', None, 200)
+        self.snip = self.font.render(self.line[0:self.counter//self.speed], True, 'white', None, 190)
 
     def render(self, surf, pos:tuple):
         surf.blit(self.snip, pos)

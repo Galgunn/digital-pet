@@ -21,7 +21,6 @@ class State():
         self.game.state_stack.append(self)
         self.on_enter()
         
-
     def exit_state(self):
         self.game.state_stack.pop()
         self.on_exit()

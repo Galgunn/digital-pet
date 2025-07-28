@@ -10,14 +10,13 @@ class DialogBox(State):
         super().__init__(game)
         self.dialogue_dict = {}
         self.json_filename = filename
-        self.load('assets/dialogue/play_button.json')
+        self.load(BASE_JSON_PATH + self.json_filename)
         self.lines = self.dialogue_dict[dialogue_key]
         self.dialogue_system = DialogueSystem(self.game, self.lines)
         self.rect = pygame.Rect(0, 170, 250, 100)
 
     def on_enter(self):
         self.dialogue_system.reset()
-        self.load(BASE_JSON_PATH + self.json_filename)
 
     def update(self):
         self.prev_state.update_animation() # type: ignore error due to prev state being None

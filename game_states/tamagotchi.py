@@ -18,7 +18,14 @@ class Game(State):
         self.eat_button = ActionButton(self.game, 'eat', (91, 186), (26, 28))
         self.sleep_button = ActionButton(self.game, 'sleep', (128, 174), (26, 28))
 
+        self.pressed_counter = {
+            'play': 0,
+            'eat': 0,
+            'sleep': 0,
+        }
+
     def update(self):
+        starting_animation_done = False
         mpos = pygame.mouse.get_pos()
         mpos = (mpos[0] / 2, mpos[1] / 2)
 
@@ -35,16 +42,35 @@ class Game(State):
         if self.start:
             if self.circle_width != 5:
                 self.circle_width -=1
+            elif self.circle_width == 5:
+                starting_animation_done = True
 
-            self.ramiel.update(button_states)
+            self.ramiel.update()
 
-            if self.ramiel.animation_done:
-                if button_states[0]:
-                    dialogue_state = DialogBox(self.game, 'press', 'play_button.json')
-                    dialogue_state.enter_state()
+            if starting_animation_done:
+                if self.play_button.just_pressed:
+                    self.button_pressed = 'play'
+                    self.ramiel.set_action('nod')
+                elif self.eat_button.just_pressed:
+                    self.button_pressed = 'eat'
+                    self.ramiel.set_action('nod')
+                elif self.sleep_button.just_pressed:
+                    self.button_pressed = 'sleep'
+                    self.ramiel.set_action('nod')
+
+                if self.ramiel.animation_done:
+                    self.trigger_dialogue(self.button_pressed, self.pressed_counter[self.button_pressed])
+                    self.pressed_counter[self.button_pressed] += 1
 
     def update_animation(self):
         self.ramiel.update()
+
+    def trigger_dialogue(self, button_pressed, press_counter):
+        index = (press_counter % 3) + 1
+        dict_key = str(button_pressed) + '_' + str(index)
+        json_filename = str(button_pressed) + '_button.json'
+        dialogue_state = DialogBox(self.game, dict_key, json_filename)
+        dialogue_state.enter_state()
 
     def render(self, surf):
         surf.fill((200, 30, 50))
