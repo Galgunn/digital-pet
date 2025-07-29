@@ -11,6 +11,7 @@ class Game(State):
     def __init__(self, game):
         super().__init__(game)
         self.start = False
+        self.start_animation_done = False
         self.circle_width = 75
 
         self.ramiel = Ramiel(self.game, (48, 65))
@@ -25,7 +26,6 @@ class Game(State):
         }
 
     def update(self):
-        starting_animation_done = False
         mpos = pygame.mouse.get_pos()
         mpos = (mpos[0] / 2, mpos[1] / 2)
 
@@ -33,43 +33,45 @@ class Game(State):
         self.eat_button.update(mpos)
         self.sleep_button.update(mpos)
 
-        button_states = (self.play_button.just_pressed, self.eat_button.just_pressed, self.sleep_button.just_pressed)
+        if not self.start and (self.play_button.just_pressed or self.eat_button.just_pressed or self.sleep_button.just_pressed):
+            self.start = True
 
-        for x in range(len(button_states)):
-            if button_states[x] == True:
-                self.start = True
-
-        if self.start:
+        if self.start and not self.start_animation_done:
             if self.circle_width != 5:
                 self.circle_width -=1
-            elif self.circle_width == 5:
-                starting_animation_done = True
+            else:
+                self.start_animation_done = True
+        elif self.start_animation_done:
+            if self.play_button.just_pressed:
+                self.json_file = 'play_button.json'
+                self.dict_key = 'play'
+                self.ramiel.set_action('nod')
+            elif self.eat_button.just_pressed:
+                self.json_file = 'eat_button.json'
+                self.dict_key = 'eat'
+                self.ramiel.set_action('nod')
+            elif self.sleep_button.just_pressed:
+                self.json_file = 'sleep_button.json'
+                self.dict_key = 'sleep'
+                self.ramiel.set_action('nod')
 
-            self.ramiel.update()
+            if self.ramiel.animation_done:
+                self.trigger_button_dialogue(self.json_file, self.dict_key, self.pressed_counter[self.dict_key])
+                self.pressed_counter[self.dict_key] += 1
 
-            if starting_animation_done:
-                if self.play_button.just_pressed:
-                    self.button_pressed = 'play'
-                    self.ramiel.set_action('nod')
-                elif self.eat_button.just_pressed:
-                    self.button_pressed = 'eat'
-                    self.ramiel.set_action('nod')
-                elif self.sleep_button.just_pressed:
-                    self.button_pressed = 'sleep'
-                    self.ramiel.set_action('nod')
-
-                if self.ramiel.animation_done:
-                    self.trigger_dialogue(self.button_pressed, self.pressed_counter[self.button_pressed])
-                    self.pressed_counter[self.button_pressed] += 1
+        self.ramiel.update()
 
     def update_animation(self):
         self.ramiel.update()
 
-    def trigger_dialogue(self, button_pressed, press_counter):
-        index = (press_counter % 3) + 1
-        dict_key = str(button_pressed) + '_' + str(index)
-        json_filename = str(button_pressed) + '_button.json'
-        dialogue_state = DialogBox(self.game, dict_key, json_filename)
+    def trigger_dialogue(self, json_file, dict_key):
+        dilogue_state = DialogBox(self.game, dict_key, json_file)
+        dilogue_state.enter_state()
+
+    def trigger_button_dialogue(self, json_file, dict_key, index):
+        index = (index % 3)
+        dict_key = str(dict_key) + '_' + str(index)
+        dialogue_state = DialogBox(self.game, dict_key, json_file)
         dialogue_state.enter_state()
 
     def render(self, surf):
