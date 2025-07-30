@@ -1,38 +1,44 @@
+import json
 import pygame
 from scripts.state import State
+from scripts.dialogue_system import DialogueSystem
+
+BASE_JSON_PATH = 'assets/dialogue/'
 
 class DialogBox(State):
-    def __init__(self, game):
+    def __init__(self, game, dialogue_key:str, filename:str):
         super().__init__(game)
-        self.lines = [
-            'this is a message gng'
-        ]
+        self.dialogue_dict = {}
+        self.json_filename = filename
+        self.load(BASE_JSON_PATH + self.json_filename)
+        self.lines = self.dialogue_dict[dialogue_key]
+        self.dialogue_system = DialogueSystem(self.game, self.lines)
+        self.rect = pygame.Rect(0, 170, 250, 100)
 
-        self.font = pygame.font.SysFont('engravers', 12)
-        self.snip = self.font.render('', True, (255, 255, 255))
-        self.counter = 0
-        self.speed = 3
-        self.done = False
-        self.current_line = 0
-        self.line = self.lines[self.current_line]
+    def on_enter(self):
+        self.dialogue_system.reset()
 
     def update(self):
-        if self.counter < self.speed * len(self.line):
-            self.counter += 1
-        elif self.counter >= self.speed * len(self.line):
-            self.done = True
+        self.prev_state.update_animation() # type: ignore error due to prev state being None
+        self.dialogue_system.update()
 
-        if self.game.interaction_options['left click']['just pressed'] and not self.done: # Display current message instantly
-            pass
-            # self.counter = self.speed * len(self.line)
-        elif self.game.interaction_options['left click']['just pressed'] and self.done and self.current_line < len(self.lines) - 1: # Proceed to next line
-            self.current_line += 1
-            self.done = False
-            self.line = self.lines[self.current_line]
-            self.counter = 0
-
-        self.snip = self.font.render(self.line[0:self.counter//self.speed], True, 'white')
-        self.game.reset_keys()
+        if self.game.interaction_options['left click']['just pressed'] and self.dialogue_system.dialogue_complete:
+            self.exit_state()
 
     def render(self, surf):
-        surf.blit(self.snip, (10, 10))
+        self.prev_state.render(surf) # type: ignore error due to prev state being None
+        pygame.draw.rect(surf, ('black'), self.rect)
+        self.dialogue_system.render(surf, (self.rect.x + 10, self.rect.y + 10))
+
+    def enter_state(self):
+        super().enter_state()
+
+    def exit_state(self):
+        super().exit_state()
+
+    def load(self, path):
+        f = open(path, 'r')
+        dialogue_data = json.load(f)
+        f.close()
+
+        self.dialogue_dict = dialogue_data

@@ -1,8 +1,12 @@
 import pygame, os
 
+pygame.init()
+
 BASE_IMG_PATH = 'assets/images/'
 WINDOW_WIDTH = 416
 WINDOW_HEIGHT = 512
+
+FONT = pygame.font.SysFont('engravers', 12)
 
 def load_image(path, colorkey=(0, 0, 0)):
     img = pygame.image.load(BASE_IMG_PATH + path).convert_alpha()
