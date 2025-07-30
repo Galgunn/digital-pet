@@ -41,6 +41,7 @@ class Game(State):
                 self.circle_width -=1
             else:
                 self.start_animation_done = True
+                self.trigger_dialogue('intro.json', 'intro_1')
         elif self.start_animation_done:
             if self.play_button.just_pressed:
                 self.json_file = 'play_button.json'
@@ -56,7 +57,7 @@ class Game(State):
                 self.ramiel.set_action('nod')
 
             if self.ramiel.animation_done:
-                self.trigger_button_dialogue(self.json_file, self.dict_key, self.pressed_counter[self.dict_key])
+                self.trigger_dialogue(self.json_file, self.dict_key, self.pressed_counter[self.dict_key])
                 self.pressed_counter[self.dict_key] += 1
 
         self.ramiel.update()
@@ -64,13 +65,10 @@ class Game(State):
     def update_animation(self):
         self.ramiel.update()
 
-    def trigger_dialogue(self, json_file, dict_key):
-        dilogue_state = DialogBox(self.game, dict_key, json_file)
-        dilogue_state.enter_state()
-
-    def trigger_button_dialogue(self, json_file, dict_key, index):
-        index = (index % 3)
-        dict_key = str(dict_key) + '_' + str(index)
+    def trigger_dialogue(self, json_file, dict_key, index=None):
+        if index is not None:
+            index = (index % 3)
+            dict_key = str(dict_key) + '_' + str(index)
         dialogue_state = DialogBox(self.game, dict_key, json_file)
         dialogue_state.enter_state()
 
